@@ -3,7 +3,7 @@
 Recreation of the Tic-Tac-Toe game in javascript.
 
 ## Run project on the web
-* Run the game on the browser [here](/index.html).
+* View it on [Github Pages](https://satishkhanal76.github.io/Tic-Tac-Toe/).
 
 ## Run locally
 * Clone the
