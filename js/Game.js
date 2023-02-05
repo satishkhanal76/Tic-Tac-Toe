@@ -78,11 +78,13 @@ export class Game {
      */
     placeItem(col, row) {
         if(this.#isOver) {
-            console.error("Cannot place item, game is already won.");
+            console.error("Cannot place item, game is already over.");
             return null;
         };
 
         let item = this.#board.placeItem(this.#currentTurn, col, row);
+
+        if(!item) return null;
 
         this.checkForWinner();
         this.checkForDraw();

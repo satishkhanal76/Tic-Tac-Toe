@@ -32,14 +32,11 @@ export class Board {
      */
     placeItem(item, col, row) {
         if(!(item instanceof Item)) return null;
-
         if(col >= this.#NUM_OF_COLUMNS) return null;
         if(row >= this.#NUM_OF_ROWS) return null;
+        if(this.#board[col][row]) return null;
 
-        if(this.#board[col][row]) {
-            console.error(`Insertion failed! Item already exists in the board at [${row}][${col}].`);
-            return;
-        };
+        //if it's a valid placing position and condition than place the item
         this.#board[col][row] = item;
         return item;
     }
