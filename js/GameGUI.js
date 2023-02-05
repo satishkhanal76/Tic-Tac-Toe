@@ -66,9 +66,9 @@ export class GameGUI {
 
     createBlocks() {
         let block;
-        for (let i = 0; i < this.#game.getBoard().getNumOfColumns(); i++) {
-            for (let j = 0; j < this.#game.getBoard().getNumOfRows(); j++) {
-                block = new BlockGUI(i, j);
+        for (let i = 0; i < this.#game.getBoard().getNumOfRows(); i++) {
+            for (let j = 0; j < this.#game.getBoard().getNumOfColumns(); j++) {
+                block = new BlockGUI(j, i);
                 this.#element.appendChild(block.getElement());
                 this.#blocks.push(block);
             }
@@ -101,6 +101,12 @@ export class GameGUI {
     }
 
     addWinLine(winnerObj) {
+        this.#winLine = document.createElement("div");
+        this.#winLine.classList.add("line-container");
+        let line = document.createElement("div");
+        line.classList.add("line");
+
+
         let topOffset, leftOffset = 0, rotation = 0;
         let width = this.#element.offsetWidth;
         let height = this.#element.offsetHeight;
@@ -112,9 +118,10 @@ export class GameGUI {
 
             case "VERTICAL_WIN":
                 rotation = 90;
-                topOffset = width / 2;
-                leftOffset = -(width / 2);
-                leftOffset += width / this.#game.getBoard().getNumOfColumns() * winnerObj.colNum + 50;  
+                topOffset = height / 2;
+                leftOffset = -(height / 2);
+                leftOffset += height / this.#game.getBoard().getNumOfColumns() * winnerObj.colNum + 50;
+                this.#winLine.style.width = height + "px";
                 break;
 
             case "DIAGNOL_WIN":
@@ -129,11 +136,6 @@ export class GameGUI {
             default:
                 break;
         }
-
-        this.#winLine = document.createElement("div");
-        this.#winLine.classList.add("line-container");
-        let line = document.createElement("div");
-        line.classList.add("line");
 
 
         this.#element.style.setProperty('--top-offset', topOffset + "px");

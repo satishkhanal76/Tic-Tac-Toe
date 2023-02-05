@@ -17,10 +17,10 @@ export class Board {
     }
 
     #createBoard() {
-        this.#board = new Array(this.#NUM_OF_ROWS);
+        this.#board = new Array(this.#NUM_OF_COLUMNS);
 
         for (let i = 0; i < this.#board.length; i++) {
-            this.#board[i] = new Array(this.#NUM_OF_COLUMNS);
+            this.#board[i] = new Array(this.#NUM_OF_ROWS);
         }
     }
     /**
@@ -50,8 +50,8 @@ export class Board {
         let item, nextItem;
 
         for (let i = 0; i < this.#NUM_OF_ROWS - 1; i++) {
-            item = this.#board[i][colNum];
-            nextItem = this.#board[i + 1][colNum];
+            item = this.#board[colNum][i];
+            nextItem = this.#board[colNum][i + 1];
             if(item != nextItem) {
                 return null;
             }
@@ -69,8 +69,8 @@ export class Board {
         let item, nextItem;
 
         for (let i = 0; i < this.#NUM_OF_COLUMNS - 1; i++) {
-            item = this.#board[rowNum][i];
-            nextItem = this.#board[rowNum][i + 1];
+            item = this.#board[i][rowNum];
+            nextItem = this.#board[i + 1][rowNum];
 
             if(item != nextItem) {
                 return null;
@@ -146,11 +146,12 @@ export class Board {
                 type: "HORIZONTAL_WIN",
                 winner,
                 rowNum: i
-            };
+            }
         }
 
         for (let i = 0; i < this.#NUM_OF_COLUMNS; i++) {
             winner = this.verticalCheck(i);
+            if (winner) this.logBoard()
             if(winner) return {
                 type: "VERTICAL_WIN",
                 winner,
@@ -176,7 +177,7 @@ export class Board {
     isSpaceAvailable() {
         for (let i = 0; i < this.#NUM_OF_COLUMNS; i++) {
             for (let j = 0; j < this.#NUM_OF_ROWS; j++) {
-                if(!this.#board[j][i]) return true;
+                if(!this.#board[i][j]) return true;
             }
         }
         return false;
@@ -194,7 +195,6 @@ export class Board {
             }
             string += "\n";
         }
-        console.log(string);
     }
 
     getNumOfColumns() {

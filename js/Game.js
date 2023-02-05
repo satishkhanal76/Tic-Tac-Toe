@@ -41,8 +41,8 @@ export class Game {
         this.#board = new Board();
     }
 
-    changeBoard(boardSize) {
-        this.#board = new Board({col: boardSize, row: boardSize});
+    changeBoard(col, row) {
+        this.#board = new Board({col, row});
     }
 
     #startGame() {
@@ -77,10 +77,7 @@ export class Game {
      * @param {int} row the row to place the item in
      */
     placeItem(col, row) {
-        if(this.#isOver) {
-            console.error("Cannot place item, game is already over.");
-            return null;
-        };
+        if(this.#isOver) return null;
 
         let item = this.#board.placeItem(this.#currentTurn, col, row);
 
