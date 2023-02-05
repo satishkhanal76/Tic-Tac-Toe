@@ -36,11 +36,11 @@ export class Board {
         if(col >= this.#NUM_OF_COLUMNS) return null;
         if(row >= this.#NUM_OF_ROWS) return null;
 
-        if(this.#board[row][col]) {
+        if(this.#board[col][row]) {
             console.error(`Insertion failed! Item already exists in the board at [${row}][${col}].`);
             return;
         };
-        this.#board[row][col] = item;
+        this.#board[col][row] = item;
         return item;
     }
 
@@ -90,7 +90,6 @@ export class Board {
 
     diagonalCheck() {
         if(this.#NUM_OF_COLUMNS != this.#NUM_OF_ROWS) {
-            console.error("Cannot do a diagonal check when the columns and rows are not equal!");
             return null;
         }
         let item, nextItem;
@@ -113,7 +112,6 @@ export class Board {
 
     otherDiagonalCheck() {
         if(this.#NUM_OF_COLUMNS != this.#NUM_OF_ROWS) {
-            console.error("Cannot do a diagonal check when the columns and rows are not equal!");
             return null;
         }
         let item, nextItem;

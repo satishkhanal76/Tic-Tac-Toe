@@ -20,25 +20,61 @@ main {
     min-height: 70vh;
     justify-content: space-evenly;
 
-
-    --num-of-cols: 3;
-    --num-of-rows: 3;
-
-    --board-width: 300px;
-    --board-height: 300px;
 }
 
 .board {
+    --num-of-cols: 3;
+    --num-of-rows: 3;
+
+    --block-width: 100px;
+    --block-height: 100px;
+
+    --top-offset: 0;
+    --left-offset: 0;
+    --rotation: 0;
+
+    position: relative;
     display: grid;
-    width: var(--board-width);
-    height: var(--board-height);
     grid-template-columns: repeat(var(--num-of-cols), auto);
+}
+
+.line-container {
+    position: absolute;
+    width: 100%;
+    height: 0.2em;
+    border-radius: 1em;
+    overflow: hidden;
+
+    pointer-events: none;
+
+    top: var(--top-offset);
+    left: var(--left-offset);
+    transform: rotate(var(--rotation));
+}
+
+.line-container .line {
+    width: 100%;
+    height: 100%;
+    background-color: rgb(113, 70, 211);
+    transform: translate(-100%);
+
+    animation: line-in 0.5s forwards;
+
+}
+
+@keyframes line-in {
+    0% {
+        transform: translate(-100%);
+    }
+    100% {
+        transform: translate(0%);
+    }
 }
 
 .block {
     display: flex;
-    width: calc(var(--board-width) / var(--num-of-cols));
-    height: calc(var(--board-height) / var(--num-of-rows));
+    width: var(--block-width);
+    height: var(--block-height);
     align-items: center;
     justify-content: center;
     font-size: 3rem;

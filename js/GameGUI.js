@@ -8,6 +8,8 @@ export class GameGUI {
     #game;
     #element;
 
+    #winLine;
+
     #blocks = [];
 
     constructor(main) {
@@ -18,11 +20,12 @@ export class GameGUI {
 
 
         
-        this.setUpMainElement();
         
         this.createBoard();
         this.createBlocks();
         this.addBlockEvents();
+        
+        this.setUpMainElement();
 
         this.addEvents();
     }
@@ -33,10 +36,8 @@ export class GameGUI {
     }
 
     setUpMainElement() {
-        this.#mainElement.style.setProperty('--num-of-cols', this.#game.getBoard().getNumOfColumns());
-        this.#mainElement.style.setProperty('--num-of-rows', this.#game.getBoard().getNumOfColumns());
-        this.#mainElement.style.setProperty('--board-width', this.#game.getBoard().getNumOfColumns() * 100 + "px");
-        this.#mainElement.style.setProperty('--board-height', this.#game.getBoard().getNumOfRows() * 100 + "px");
+        this.#element.style.setProperty('--num-of-cols', this.#game.getBoard().getNumOfColumns());
+        this.#element.style.setProperty('--num-of-rows', this.#game.getBoard().getNumOfColumns());
     }
 
     handleKeydown(eve) {
@@ -46,6 +47,7 @@ export class GameGUI {
                 const element = this.#blocks[i];
                 element.unmark();
             }
+            this.removeWinLine();
         }
     }
 
@@ -91,7 +93,59 @@ export class GameGUI {
 
 
     handleGameWin(winnerObj) {
+
+        this.addWinLine(winnerObj);
+
+
         console.log(winnerObj["winner"].getCharacter(), " won the game!");
+    }
+
+    addWinLine(winnerObj) {
+        let topOffset, leftOffset = 0, rotation = 0;
+        let width = this.#element.offsetWidth;
+        let height = this.#element.offsetHeight;
+
+        switch (winnerObj.type) {
+            case "HORIZONTAL_WIN":
+                topOffset = height / this.#game.getBoard().getNumOfRows() * winnerObj.rowNum + 50;
+                break;
+
+            case "VERTICAL_WIN":
+                rotation = 90;
+                topOffset = width / 2;
+                leftOffset = -(width / 2);
+                leftOffset += width / this.#game.getBoard().getNumOfColumns() * winnerObj.colNum + 50;  
+                break;
+
+            case "DIAGNOL_WIN":
+                rotation = 45;
+                topOffset = width / 2;
+                break;
+
+            case 'X_DIAGNOL_WIN':
+                rotation = 135;
+                topOffset = width / 2;
+                break;
+            default:
+                break;
+        }
+
+        this.#winLine = document.createElement("div");
+        this.#winLine.classList.add("line-container");
+        let line = document.createElement("div");
+        line.classList.add("line");
+
+
+        this.#element.style.setProperty('--top-offset', topOffset + "px");
+        this.#element.style.setProperty('--left-offset', leftOffset + "px");
+        this.#element.style.setProperty('--rotation', rotation + "deg");
+
+        this.#winLine.appendChild(line);
+        this.#element.appendChild(this.#winLine);
+    }
+
+    removeWinLine() {
+        if(this.#winLine) this.#winLine.remove();
     }
 
     handleGameTie() {

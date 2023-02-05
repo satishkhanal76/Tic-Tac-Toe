@@ -92,6 +92,8 @@ export class Game {
     }
 
     checkForDraw() {
+        //if there is a winner already then return
+        if(this.#isOver) return null; 
         if(!this.#board.isSpaceAvailable()) {
             this.#isOver = true;
             this.#winner = null;
