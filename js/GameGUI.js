@@ -41,14 +41,20 @@ export class GameGUI {
     }
 
     handleKeydown(eve) {
-        if(eve.key == " " && this.#game.isOver()) {
-            this.#game.restart();
-            for (let i = 0; i < this.#blocks.length; i++) {
-                const element = this.#blocks[i];
-                element.unmark();
-            }
-            this.removeWinLine();
+        if(eve.key == " ") {
+            this.reset(); 
         }
+    }
+
+    reset() {
+        if(!this.#game.isOver()) return null;
+        this.#game.restart();
+        for (let i = 0; i < this.#blocks.length; i++) {
+            const element = this.#blocks[i];
+            element.unmark();
+        }
+        this.removeWinLine();
+        return true;
     }
 
     addBlockEvents() {
@@ -93,11 +99,27 @@ export class GameGUI {
 
 
     handleGameWin(winnerObj) {
-
         this.addWinLine(winnerObj);
+        this.showModal(`${winnerObj["winner"].getCharacter()} wins!`);
+        
+    }
 
+    showModal(text) {
+        let modalContainer = document.getElementById("modal-container");
 
-        console.log(winnerObj["winner"].getCharacter(), " won the game!");
+        document.getElementById("modal-title").textContent = text;
+        document.getElementById("close-button").addEventListener("click", () => modalContainer.style.display = "none");
+        document.getElementById("reset-button").addEventListener("click", () => {
+            if(this.reset()) {
+                modalContainer.style.display = "none";
+            }
+        });
+        
+        modalContainer.style.display = "flex";
+    }
+
+    handleGameTie() {
+        this.showModal(`It's a tie!`);
     }
 
     addWinLine(winnerObj) {
@@ -148,9 +170,5 @@ export class GameGUI {
 
     removeWinLine() {
         if(this.#winLine) this.#winLine.remove();
-    }
-
-    handleGameTie() {
-        console.log("It's a tie!");
     }
 }
