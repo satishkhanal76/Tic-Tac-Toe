@@ -57,8 +57,40 @@ export class Game {
      * Creates the item
      */
     #createItems() {
-        this.#items.push(new Item("X"));
-        this.#items.push(new Item("O"));
+        this.#items.push(new Item('X'));
+        this.#items.push(new Item('O'));
+    }
+
+    minimax(maximizing) {
+        if(this.isOver()) {
+            if(!this.#winner) return 0; //no winner (draw)
+            return (this.getWinner() == maximizing) ? 1 : -1; //if x wins return 1 else -1
+        }
+
+        let availableBlocks = this.#board.getAvailableSpaces();
+
+
+        if(this.getCurrentTurn() == maximizing) {
+            
+            let value = -Infinity;
+            availableBlocks.forEach(block => {
+                this.placeItem(block.col, block.row);
+                value = Math.max(value, this.minimax(maximizing));
+                this.unplaceItem(block.col, block.row);
+
+            });
+            return value;
+        }else {
+            let value = Infinity;
+
+            availableBlocks.forEach(block => {
+                this.placeItem(block.col, block.row);
+                value = Math.min(value, this.minimax(maximizing));
+                this.unplaceItem(block.col, block.row);
+
+            });
+            return value;
+        }
     }
 
     /**
@@ -88,6 +120,17 @@ export class Game {
         this.changeTurn();
         
         return item;
+    }
+
+    unplaceItem(col, row) {
+        this.#board.unplaceItem(col, row);
+
+        this.#isOver = false;
+        this.#winner = null;
+
+        this.checkForWinner();
+        this.checkForDraw();
+        this.changeTurn();
     }
 
     checkForDraw() {

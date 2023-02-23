@@ -41,6 +41,10 @@ export class Board {
         return item;
     }
 
+    unplaceItem(col, row) {
+        this.#board[col][row] = undefined;
+    }
+
     /**
      * Checks a vertical line on the tic tac toe board
      * @param {int} colNum the column number to check

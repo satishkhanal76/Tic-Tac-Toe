@@ -12,6 +12,8 @@ export class GameGUI {
 
     #blocks = [];
 
+    #ai;
+
     constructor(main) {
         this.#mainElement = main;
 
@@ -28,11 +30,56 @@ export class GameGUI {
         this.setUpMainElement();
 
         this.addEvents();
+
+        this.startGame();
+        
+    }
+
+    startGame() {
+        this.doAiMove();
+    }
+
+    doAiMove() {
+        if(!this.#ai) return;
+        if(this.#game.getCurrentTurn() != this.#ai) return;
+        
+        let bestBlock = this.minimax();
+
+        if(!bestBlock) return;
+
+        bestBlock = this.#blocks.filter(block => (block.getColumn() == bestBlock.col && block.getRow() == bestBlock.row));
+        bestBlock = bestBlock.shift();
+        this.clicked(bestBlock);
+    }
+
+    minimax() {
+        let bestValue = -Infinity;
+        let bestMove;
+
+        let availableBlocks = this.#game.getBoard().getAvailableSpaces();
+        
+        let maximizingPlayer = this.#game.getCurrentTurn();
+
+        availableBlocks.forEach(block => {
+            this.#game.placeItem(block.col, block.row);
+
+            let value = Math.max(bestValue, this.#game.minimax(maximizingPlayer));
+            
+            if (value > bestValue) {
+                bestValue = value;
+                bestMove = block;
+            }
+
+            this.#game.unplaceItem(block.col, block.row);
+        });
+
+        return bestMove;
+
     }
 
     addEvents() {
         document.body.addEventListener("keydown", (eve) => this.handleKeydown(eve));
-
+        document.body.addEventListener("dblclick", eve => this.handleDoubleClick(eve));
     }
 
     setUpMainElement() {
@@ -43,18 +90,35 @@ export class GameGUI {
     handleKeydown(eve) {
         if(eve.key == " ") {
             this.reset(); 
+        } else if(eve.key == "a") {
+            this.envokeAi();
         }
+    }
+    handleDoubleClick(eve) {
+        this.envokeAi();
+    }
+    envokeAi() {
+        if(this.#ai) return;
+        this.#ai = this.#game.getCurrentTurn();
+        this.doAiMove();
     }
 
     reset() {
         if(!this.#game.isOver()) return null;
         this.#game.restart();
+
+        this.unmarkBlocks();
+        this.removeWinLine();
+        
+        this.startGame();
+        return true;
+    }
+
+    unmarkBlocks() {
         for (let i = 0; i < this.#blocks.length; i++) {
             const element = this.#blocks[i];
             element.unmark();
         }
-        this.removeWinLine();
-        return true;
     }
 
     addBlockEvents() {
@@ -95,6 +159,7 @@ export class GameGUI {
         } else if(this.#game.isOver()) {
             this.handleGameTie();
         }
+        this.doAiMove();
     }
 
 
