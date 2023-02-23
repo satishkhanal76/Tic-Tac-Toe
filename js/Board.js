@@ -174,6 +174,16 @@ export class Board {
         return null;
     }
 
+    getAvailableSpaces() {
+        let spaces = [];
+        for (let i = 0; i < this.#NUM_OF_COLUMNS; i++) {
+            for (let j = 0; j < this.#NUM_OF_ROWS; j++) {
+                if(!this.#board[i][j]) spaces.push({col: i, row: j});
+            }
+        }
+        return spaces;
+    }
+
     isSpaceAvailable() {
         for (let i = 0; i < this.#NUM_OF_COLUMNS; i++) {
             for (let j = 0; j < this.#NUM_OF_ROWS; j++) {

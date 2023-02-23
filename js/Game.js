@@ -57,8 +57,8 @@ export class Game {
      * Creates the item
      */
     #createItems() {
-        this.#items.push(new Item("O"));
         this.#items.push(new Item("X"));
+        this.#items.push(new Item("O"));
     }
 
     /**
@@ -93,7 +93,9 @@ export class Game {
     checkForDraw() {
         //if there is a winner already then return
         if(this.#isOver) return null; 
-        if(!this.#board.isSpaceAvailable()) {
+
+        let availableSpaces = this.#board.getAvailableSpaces();
+        if(availableSpaces.length < 1) {
             this.#isOver = true;
             this.#winner = null;
         }
