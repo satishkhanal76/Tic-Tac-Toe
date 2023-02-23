@@ -19,8 +19,6 @@ export class GameGUI {
 
         
         this.#game = new Game();
-
-
         
         
         this.createBoard();

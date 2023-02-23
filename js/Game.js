@@ -64,33 +64,29 @@ export class Game {
     minimax(maximizing) {
         if(this.isOver()) {
             if(!this.#winner) return 0; //no winner (draw)
-            return (this.getWinner() == maximizing) ? 1 : -1; //if x wins return 1 else -1
+            return (this.getWinner() == maximizing) ? 1 : -1;
+            
         }
 
         let availableBlocks = this.#board.getAvailableSpaces();
+        
+        let isMaximizing = (this.getCurrentTurn() == maximizing);
 
+        let value = (isMaximizing) ? -Infinity : Infinity;
 
-        if(this.getCurrentTurn() == maximizing) {
-            
-            let value = -Infinity;
-            availableBlocks.forEach(block => {
-                this.placeItem(block.col, block.row);
+        availableBlocks.forEach(block => {
+            this.placeItem(block.col, block.row);
+
+            if(isMaximizing) {
                 value = Math.max(value, this.minimax(maximizing));
-                this.unplaceItem(block.col, block.row);
-
-            });
-            return value;
-        }else {
-            let value = Infinity;
-
-            availableBlocks.forEach(block => {
-                this.placeItem(block.col, block.row);
+            }else {
                 value = Math.min(value, this.minimax(maximizing));
-                this.unplaceItem(block.col, block.row);
+            }
 
-            });
-            return value;
-        }
+            this.unplaceItem(block.col, block.row);
+        });
+
+        return value;
     }
 
     /**

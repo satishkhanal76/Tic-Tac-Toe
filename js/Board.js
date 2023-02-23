@@ -201,8 +201,8 @@ export class Board {
         let string = "";
         for (let i = 0; i < this.#board.length; i++) {
             for (let j = 0; j < this.#board[i].length; j++) {
-                if(this.#board[j][i]){
-                    string += this.#board[j][i].getCharacter();
+                if(this.#board[i][j]){
+                    string += this.#board[i][j].getCharacter();
                 }else {
                     string += " ";
                 }
