@@ -93,10 +93,9 @@ export class GameGUI {
         }
     }
     handleDoubleClick(eve) {
-        this.envokeAi();
+        if(!this.#ai) this.envokeAi();
     }
     envokeAi() {
-        if(this.#ai) return;
         this.#ai = this.#game.getCurrentTurn();
         this.doAiMove();
     }
