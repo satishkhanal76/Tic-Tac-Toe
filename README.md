@@ -7,7 +7,7 @@ Recreation of the Tic-Tac-Toe game in Javascript.
 
 ## How it works
 * X starts with the game
-* if you want to start the game play on a box and double-click on the page to envoke bot
+* if you want to start the game play on a box and double-click on the page to invoke bot
 * if you want the bot to go first double-click before playing
 
 
