@@ -61,6 +61,10 @@ export class Game {
         this.#items.push(new Item('O'));
     }
 
+    getAllPlayers() {
+        return this.#items;
+    }
+
     minimax(maximizing) {
         if(this.isOver()) {
             if(!this.#winner) return 0; //no winner (draw)

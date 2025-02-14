@@ -233,4 +233,27 @@ export class GameGUI {
     removeWinLine() {
         if(this.#winLine) this.#winLine.remove();
     }
+
+    setPlayers(xPlayerType, oPlayerType) {
+        const allPlayers = this.#game.getAllPlayers();
+
+        if(xPlayerType == "computer") {
+            console.log("X is ai")
+            this.#ai = allPlayers.find(player => player.getCharacter() == "X");
+        }
+
+        if(oPlayerType == "computer") {
+            this.#ai = allPlayers.find(player => player.getCharacter() == "O");
+        }
+
+        this.startGame();
+    }
+
+    restart() {
+        this.#game.restart();
+        this.unmarkBlocks();
+        this.removeWinLine();
+        this.startGame();
+        this.#ai = null;
+    }
 }

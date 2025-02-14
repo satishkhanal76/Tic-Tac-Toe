@@ -22,6 +22,20 @@ main {
 
 }
 
+.game-settings {
+    display: flex;
+    flex-direction: row;
+    gap: 2em;
+}
+
+.game-settings > div {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: 1.5rem;
+}
+
+
 .board {
     --num-of-cols: 3;
     --num-of-rows: 3;
@@ -50,13 +64,16 @@ main {
     top: var(--top-offset);
     left: var(--left-offset);
     transform: rotate(var(--rotation));
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .line-container .line {
-    width: 100%;
+    width: 0%;
     height: 100%;
     background-color: rgb(113, 70, 211);
-    transform: translate(-100%);
 
     animation: line-in 0.5s forwards;
 
@@ -66,8 +83,8 @@ main {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100svw;
+    height: 100svh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -113,10 +130,10 @@ main {
 
 @keyframes line-in {
     0% {
-        transform: translate(-100%);
+        width: 0%;
     }
     100% {
-        transform: translate(0%);
+        width: 90%;
     }
 }
 
