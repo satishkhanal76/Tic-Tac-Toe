@@ -1,5 +1,6 @@
 import { Game } from "./Game.js";
 import { BlockGUI } from "./BlockGUI.js";
+import { Item } from "./Item.js";
 
 export class GameGUI {
 
@@ -17,20 +18,20 @@ export class GameGUI {
     constructor(main) {
         this.#mainElement = main;
 
-        
         this.#game = new Game();
-        
-        
+
+
         this.createBoard();
         this.createBlocks();
+
         this.addBlockEvents();
-        
+
         this.setUpMainElement();
 
         this.addEvents();
 
         this.startGame();
-        
+
     }
 
     startGame() {
@@ -40,7 +41,7 @@ export class GameGUI {
     doAiMove() {
         if(!this.#ai) return;
         if(this.#game.getCurrentTurn() != this.#ai) return;
-        
+
         let bestBlock = this.minimax();
 
         if(!bestBlock) return;
@@ -55,14 +56,14 @@ export class GameGUI {
         let bestMove;
 
         let availableBlocks = this.#game.getBoard().getAvailableSpaces();
-        
+
         let maximizingPlayer = this.#game.getCurrentTurn();
 
         availableBlocks.forEach(block => {
             this.#game.placeItem(block.col, block.row);
 
             let value = Math.max(bestValue, this.#game.minimax(maximizingPlayer));
-            
+
             if (value > bestValue) {
                 bestValue = value;
                 bestMove = block;
@@ -77,7 +78,6 @@ export class GameGUI {
 
     addEvents() {
         document.body.addEventListener("keydown", (eve) => this.handleKeydown(eve));
-        document.body.addEventListener("dblclick", eve => this.handleDoubleClick(eve));
     }
 
     setUpMainElement() {
@@ -87,7 +87,7 @@ export class GameGUI {
 
     handleKeydown(eve) {
         if(eve.key == " ") {
-            this.reset(); 
+            this.reset();
         } else if(eve.key == "a") {
             this.envokeAi();
         }
@@ -106,7 +106,7 @@ export class GameGUI {
 
         this.unmarkBlocks();
         this.removeWinLine();
-        
+
         this.startGame();
         return true;
     }
@@ -163,7 +163,7 @@ export class GameGUI {
     handleGameWin(winnerObj) {
         this.addWinLine(winnerObj);
         this.showModal(`${winnerObj["winner"].getCharacter()} wins!`);
-        
+
     }
 
     showModal(text) {
@@ -176,7 +176,7 @@ export class GameGUI {
                 modalContainer.style.display = "none";
             }
         });
-        
+
         modalContainer.style.display = "flex";
     }
 
@@ -255,5 +255,49 @@ export class GameGUI {
         this.removeWinLine();
         this.startGame();
         this.#ai = null;
+    }
+
+    handle404() {
+
+        const itemX = new Item("X");
+        const itemO = new Item("O");
+
+
+        const xCoords = [
+            // eyes
+            [0, 0], [2, 0],
+            // mouth (straight)
+            [0, 2], [1, 2], [2, 2],
+        ];
+
+        const oCoords = [
+            // nose
+            [1, 1],
+        ];
+
+        this.#blocks.forEach((block) => {
+            const col = block.getColumn();
+            const row = block.getRow();
+
+            // Mark X positions
+            for (let i = 0; i < xCoords.length; i++) {
+                const [c, r] = xCoords[i];
+                if (col === c && row === r) {
+                    block.mark(itemX);
+                    return;
+                }
+            }
+
+            // Mark O positions
+            for (let i = 0; i < oCoords.length; i++) {
+                const [c, r] = oCoords[i];
+                if (col === c && row === r) {
+                    block.mark(itemO);
+                    return;
+                }
+            }
+        });
+
+        this.showModal("Page not found!");
     }
 }
